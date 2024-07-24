@@ -1,6 +1,6 @@
 ﻿using LanguageExt;
 
-namespace Providers.ValueObjects
+namespace Providers.Business.ValueObjects
 {
     public sealed class Email : ValueObject
     {
