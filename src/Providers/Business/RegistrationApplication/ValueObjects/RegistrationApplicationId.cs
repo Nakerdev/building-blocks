@@ -1,34 +1,35 @@
 ﻿using LanguageExt;
 using System.Net.Mail;
+using ValueObjects;
 
-namespace ValueObjects
+namespace Providers.Business.RegistrationApplication.ValueObjects
 {
-    public sealed class Email : ValueObject
+    public sealed class RegistrationApplicationId : ValueObject
     {
         private readonly string Value;
 
-        public static Either<ValidationError, Email> Create(string value)
+        public static Either<ValidationError, RegistrationApplicationId> Create(string value)
         {
-            if(string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value)) 
+            if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
             {
                 return ValidationError.Required;
             }
 
             const int MAX_ALLOWED_EMAIL_LENGHT = 255;
-            if(value.Length() > MAX_ALLOWED_EMAIL_LENGHT) 
+            if (value.Length() > MAX_ALLOWED_EMAIL_LENGHT)
             {
                 return ValidationError.MaximumLengthExceeded;
             }
 
-            if (!IsValidEmail(value)) 
-            { 
+            if (!IsValidEmail(value))
+            {
                 return ValidationError.InvalidFormat;
             }
 
-            return new Email(value);
+            return new RegistrationApplicationId(value);
         }
 
-        private Email(string value)
+        private RegistrationApplicationId(string value)
         {
             Value = value;
         }

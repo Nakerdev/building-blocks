@@ -1,7 +1,6 @@
 using FluentAssertions;
 using LanguageExt.UnsafeValueAccess;
 using NUnit.Framework.Internal;
-using Providers.Business.ValueObjects;
 using ValueObjects;
 
 namespace ValueObjectsTests

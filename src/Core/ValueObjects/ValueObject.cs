@@ -1,4 +1,4 @@
-﻿namespace Providers.Business.ValueObjects
+﻿namespace ValueObjects
 {
     public abstract class ValueObject
     {

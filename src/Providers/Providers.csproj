@@ -11,8 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Business\RegistrationApplication\ValueObjects\" />
     <Folder Include="Infrastructure\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\ValueObjects\ValueObjects.csproj" />
   </ItemGroup>
 
 </Project>
