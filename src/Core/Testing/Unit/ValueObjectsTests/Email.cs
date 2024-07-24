@@ -2,8 +2,9 @@ using FluentAssertions;
 using LanguageExt.UnsafeValueAccess;
 using NUnit.Framework.Internal;
 using Providers.Business.ValueObjects;
+using ValueObjects;
 
-namespace Providers.ValueObjects
+namespace ValueObjectsTests
 {
     [TestFixture]
     public sealed class EmailTests
@@ -26,7 +27,7 @@ namespace Providers.ValueObjects
             other.IsRight.Should().BeTrue();
             (email.ValueUnsafe() == other.ValueUnsafe()).Should().BeTrue();
             (email.ValueUnsafe() != other.ValueUnsafe()).Should().BeFalse();
-            (email.ValueUnsafe().Equals(other.ValueUnsafe())).Should().BeTrue();
+            email.ValueUnsafe().Equals(other.ValueUnsafe()).Should().BeTrue();
         }
 
         [Test]
@@ -39,7 +40,36 @@ namespace Providers.ValueObjects
             other.IsRight.Should().BeTrue();
             (email.ValueUnsafe() == other.ValueUnsafe()).Should().BeFalse();
             (email.ValueUnsafe() != other.ValueUnsafe()).Should().BeTrue();
-            (email.ValueUnsafe().Equals(other.ValueUnsafe())).Should().BeFalse();
+            email.ValueUnsafe().Equals(other.ValueUnsafe()).Should().BeFalse();
+        }
+
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        public void Does_Not_Create_Email_When_Value_Is_Not_Provided(string value)
+        {
+            var result = Email.Create(value);
+
+            result.IsLeft.Should().BeTrue();
+            result.IfLeft(error => error.Should().Be(ValidationError.Required));
+        }
+
+        [Test]
+        public void Does_Not_Create_Email_When_Value_Exceeds_Max_Allowed_Length()
+        {
+            var result = Email.Create(new string('a', 256));
+
+            result.IsLeft.Should().BeTrue();
+            result.IfLeft(error => error.Should().Be(ValidationError.MaximumLengthExceeded));
+        }
+
+        [Test]
+        public void Does_Not_Create_Email_When_Is_Not_Valid_Email()
+        {
+            var result = Email.Create("not-valid#email.com");
+
+            result.IsLeft.Should().BeTrue();
+            result.IfLeft(error => error.Should().Be(ValidationError.InvalidFormat));
         }
     }
 }
