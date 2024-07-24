@@ -3,11 +3,11 @@ using ValueObjects;
 
 namespace Providers.Business.RegistrationApplication.ValueObjects
 {
-    public sealed class RegistrationApplicationId : ValueObject
+    public sealed class CityId : ValueObject
     {
         private readonly Guid Value;
 
-        public static Either<ValidationError, RegistrationApplicationId> Create(string value)
+        public static Either<ValidationError, CityId> Create(string value)
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
             {
@@ -20,15 +20,15 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
                 return ValidationError.InvalidFormat;
             }
 
-            return new RegistrationApplicationId(id);
+            return new CityId(id);
         }
 
-        private RegistrationApplicationId(Guid value)
+        private CityId(Guid value)
         {
             Value = value;
         }
 
-        protected override IEnumerable<object> GetEqualityComponents()
+        public override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;
         }
