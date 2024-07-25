@@ -1,6 +1,5 @@
 ﻿using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
-using System.Xml;
 using ValueObjects;
 
 namespace Providers.Business.RegistrationApplication.ValueObjects

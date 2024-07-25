@@ -15,12 +15,13 @@ namespace Providers.Business.RegistrationApplication
 
         public RegistrationApplication(
             RegistrationApplicationId id,
-            Provider provider,
+            Name providerName,
+            Address providerAddress,
             List<Contact> contacts,
             Option<Contract> contract)
         {
             Id = id;
-            Provider = provider;
+            Provider = new Provider(name: providerName, address: providerAddress);
             Contacts = contacts;
             Contract = contract;
         }
