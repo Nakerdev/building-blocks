@@ -1,5 +1,4 @@
 ﻿using Providers.Business.RegistrationApplication.Contacts.ValueObjects;
-using Providers.Business.RegistrationApplication.Contracts.ValueObjects;
 using ValueObjects;
 
 namespace Providers.Business.RegistrationApplication.Contacts

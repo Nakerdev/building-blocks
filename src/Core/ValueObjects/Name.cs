@@ -4,7 +4,7 @@ namespace ValueObjects
 {
     public sealed class Name : ValueObject
     {
-        private readonly string Value;
+        public readonly string Value;
 
         public static Either<ValidationError, Name> Create(string value)
         {
@@ -19,6 +19,11 @@ namespace ValueObjects
                 return new ValidationError(nameof(Name), ValidationErrorCode.MaximumLengthExceeded);
             }
 
+            return new Name(value);
+        }
+
+        public static Name UnsafeCreate(string value)
+        {
             return new Name(value);
         }
 

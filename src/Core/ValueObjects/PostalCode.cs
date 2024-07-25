@@ -4,7 +4,7 @@ namespace ValueObjects
 {
     public sealed class PostalCode : ValueObject
     {
-        private readonly int Value;
+        public readonly int Value;
 
         public static Either<ValidationError, PostalCode> Create(string value, string? customErrorFieldId = null)
         {
@@ -33,6 +33,12 @@ namespace ValueObjects
                 return new ValidationError(fieldId, errorCode);
             }
         }
+
+        public static PostalCode UnsafeCreate(int value) 
+        { 
+            return new PostalCode(value);
+        }
+
 
         private PostalCode(int value)
         {

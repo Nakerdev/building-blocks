@@ -7,8 +7,8 @@ namespace Providers.Business.RegistrationApplication.Contacts.ValueObjects
 {
     public sealed class Address : ValueObject
     {
-        private readonly CityId CityId;
-        private readonly ProvinceId ProvinceId;
+        public readonly CityId CityId;
+        public readonly ProvinceId ProvinceId;
 
         public static Validation<ValidationError, Address> Create(
             string cityId,
@@ -30,6 +30,13 @@ namespace Providers.Business.RegistrationApplication.Contacts.ValueObjects
                 provinceId: provinceIdResult.ValueUnsafe());
         }
 
+        public static Address UnsafeCreate(Guid provinceId, Guid cityId) 
+        {
+            return new Address(
+                provinceId: ProvinceId.UnsafeCreate(provinceId),
+                cityId: CityId.UnsafeCreate(cityId));
+        }
+
         public Address(
             CityId cityId,
             ProvinceId provinceId)
@@ -40,8 +47,8 @@ namespace Providers.Business.RegistrationApplication.Contacts.ValueObjects
 
         public override IEnumerable<object> GetEqualityComponents()
         {
-            yield return Street.GetEqualityComponents();
-            yield return PostalCode.GetEqualityComponents();
+            yield return CityId.GetEqualityComponents();
+            yield return ProvinceId.GetEqualityComponents();
         }
 
         public override string ToString()

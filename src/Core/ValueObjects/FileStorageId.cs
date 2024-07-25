@@ -4,7 +4,7 @@ namespace ValueObjects
 {
     public sealed class FileStorageId : ValueObject
     {
-        private readonly Guid Value;
+        public readonly Guid Value;
 
         public static Either<ValidationError, FileStorageId> Create(string value)
         {
@@ -20,6 +20,11 @@ namespace ValueObjects
             }
 
             return new FileStorageId(id);
+        }
+
+        public static FileStorageId UnsafeCreate(Guid value) 
+        {
+            return new FileStorageId(value);
         }
 
         private FileStorageId(Guid value)

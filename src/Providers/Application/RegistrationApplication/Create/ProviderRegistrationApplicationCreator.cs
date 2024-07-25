@@ -1,6 +1,7 @@
 ﻿using LanguageExt;
 using Providers.Business.RegistrationApplication;
 using Providers.Business.RegistrationApplication.Contacts;
+using Providers.Infrastructure.RegistrationApplication;
 
 namespace Providers.Application.RegistrationApplication.Create
 {
@@ -16,19 +17,26 @@ namespace Providers.Application.RegistrationApplication.Create
         Either<ProviderRegistrationApplicationCreationError, Business.RegistrationApplication.RegistrationApplication> Create(
             ProviderRegistrationApplicationRequest request)
         {
-            if(registrationApplicationRepository.ExistByProviderName(request.ProviderName)) 
+            if (registrationApplicationRepository.ExistByProviderName(request.ProviderName))
             {
                 return ProviderRegistrationApplicationCreationError.RegistrationApplicationAlreadyExist;
             }
 
-            var application = new Business.RegistrationApplication.RegistrationApplication(
+            var application = BuildApplication(request);
+            registrationApplicationRepository.Create(application);
+            return application;
+
+        }
+
+        private static Business.RegistrationApplication.RegistrationApplication BuildApplication(
+            ProviderRegistrationApplicationRequest request)
+        {
+            return new Business.RegistrationApplication.RegistrationApplication(
                 id: request.Id,
                 providerName: request.ProviderName,
                 providerAddress: request.ProviderAddress,
                 contacts: new List<Contact>(),
                 contract: Prelude.None);
-            registrationApplicationRepository.Create(application);
-            return application;
         }
     }
 

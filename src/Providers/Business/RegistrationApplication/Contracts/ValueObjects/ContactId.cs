@@ -1,11 +1,12 @@
 ﻿using LanguageExt;
+using System.Reflection.Metadata.Ecma335;
 using ValueObjects;
 
 namespace Providers.Business.RegistrationApplication.Contracts.ValueObjects
 {
     public sealed class ContractId : ValueObject
     {
-        private readonly Guid Value;
+        public readonly Guid Value;
 
         public static Either<ValidationError, ContractId> Create(string value)
         {
@@ -21,6 +22,11 @@ namespace Providers.Business.RegistrationApplication.Contracts.ValueObjects
             }
 
             return new ContractId(id);
+        }
+
+        public static ContractId UnsafeCreate(Guid value) 
+        {
+            return new ContractId(value);
         }
 
         private ContractId(Guid value)

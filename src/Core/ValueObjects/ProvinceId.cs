@@ -5,7 +5,7 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
 {
     public sealed class ProvinceId : ValueObject
     {
-        private readonly Guid Value;
+        public readonly Guid Value;
 
         public static Either<ValidationError, ProvinceId> Create(string value, string? customErrorFieldId = null)
         {
@@ -27,6 +27,11 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
                 var fieldId = customErrorFieldId == null ? nameof(ProvinceId) : customErrorFieldId;
                 return new ValidationError(fieldId, errorCode);
             }
+        }
+
+        public static ProvinceId UnsafeCreate(Guid value) 
+        { 
+            return new ProvinceId (value);
         }
 
         private ProvinceId(Guid value)

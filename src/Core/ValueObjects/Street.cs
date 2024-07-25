@@ -4,7 +4,7 @@ namespace ValueObjects
 {
     public sealed class Street : ValueObject
     {
-        private readonly string Value;
+        public readonly string Value;
 
         public static Either<ValidationError, Street> Create(string value, string? customErrorFieldId = null)
         {
@@ -26,6 +26,11 @@ namespace ValueObjects
                 var fieldId = customErrorFieldId == null ? nameof(Street) : customErrorFieldId;
                 return new ValidationError(fieldId, errorCode);
             }
+        }
+
+        public static Street UnsafeCreate(string value) 
+        { 
+            return new Street(value);
         }
 
         private Street(string value)

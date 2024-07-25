@@ -6,10 +6,10 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
 {
     public sealed class Address : ValueObject
     {
-        private readonly Street Street;
-        private readonly PostalCode PostalCode;
-        private readonly CityId CityId;
-        private readonly ProvinceId ProvinceId;
+        public readonly Street Street;
+        public readonly PostalCode PostalCode;
+        public readonly CityId CityId;
+        public readonly ProvinceId ProvinceId;
 
         public static Validation<ValidationError, Address> Create(
             string street,
@@ -40,6 +40,19 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
                 postalCode: postalCodeResult.ValueUnsafe(), 
                 cityId: cityIdResult.ValueUnsafe(), 
                 provinceId: provinceIdResult.ValueUnsafe());
+        }
+
+        public static Address UnsafeCreate(
+            string street, 
+            int postalCode, 
+            Guid provinceId, 
+            Guid cityId) 
+        { 
+            return new Address(
+                street: Street.UnsafeCreate(street),
+                postalCode: PostalCode.UnsafeCreate(postalCode),
+                provinceId: ProvinceId.UnsafeCreate(provinceId),
+                cityId: CityId.UnsafeCreate(cityId));
         }
 
         public Address(

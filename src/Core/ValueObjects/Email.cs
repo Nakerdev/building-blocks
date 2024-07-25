@@ -5,7 +5,7 @@ namespace ValueObjects
 {
     public sealed class Email : ValueObject
     {
-        private readonly string Value;
+        public readonly string Value;
 
         public static Either<ValidationError, Email> Create(string value)
         {
@@ -25,6 +25,11 @@ namespace ValueObjects
                 return new ValidationError(nameof(Email), ValidationErrorCode.InvalidFormat);
             }
 
+            return new Email(value);
+        }
+
+        public static Email UnsafeCreate(string value)
+        {
             return new Email(value);
         }
 

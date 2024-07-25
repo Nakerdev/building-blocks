@@ -5,7 +5,7 @@ namespace Providers.Business.RegistrationApplication.Contacts.ValueObjects
 {
     public sealed class ContactId : ValueObject
     {
-        private readonly Guid Value;
+        public readonly Guid Value;
 
         public static Either<ValidationError, ContactId> Create(string value)
         {
@@ -21,6 +21,11 @@ namespace Providers.Business.RegistrationApplication.Contacts.ValueObjects
             }
 
             return new ContactId(id);
+        }
+
+        public static ContactId UnsafeCreate(Guid value) 
+        {
+            return new ContactId(value);
         }
 
         private ContactId(Guid value)

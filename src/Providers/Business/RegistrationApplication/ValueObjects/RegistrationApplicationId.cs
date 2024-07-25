@@ -5,7 +5,7 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
 {
     public sealed class RegistrationApplicationId : ValueObject
     {
-        private readonly Guid Value;
+        public readonly Guid Value;
 
         public static Either<ValidationError, RegistrationApplicationId> Create(string value)
         {
@@ -21,6 +21,11 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
             }
 
             return new RegistrationApplicationId(id);
+        }
+
+        public static RegistrationApplicationId UnsafeCreate(Guid value)
+        {
+            return new RegistrationApplicationId(value);
         }
 
         private RegistrationApplicationId(Guid value)
