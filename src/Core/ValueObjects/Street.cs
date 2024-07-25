@@ -6,20 +6,26 @@ namespace ValueObjects
     {
         private readonly string Value;
 
-        public static Either<ValidationError, Street> Create(string value)
+        public static Either<ValidationError, Street> Create(string value, string? customErrorFieldId = null)
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
             {
-                return ValidationError.Required;
+                return BuildValidationError(ValidationErrorCode.Required);
             }
 
             const int MAX_ALLOWED_STREET_LENGHT = 255;
             if (value.Length() > MAX_ALLOWED_STREET_LENGHT)
             {
-                return ValidationError.MaximumLengthExceeded;
+                return BuildValidationError(ValidationErrorCode.MaximumLengthExceeded);
             }
 
             return new Street(value);
+
+            ValidationError BuildValidationError(ValidationErrorCode errorCode)
+            {
+                var fieldId = customErrorFieldId == null ? nameof(Street) : customErrorFieldId;
+                return new ValidationError(fieldId, errorCode);
+            }
         }
 
         private Street(string value)

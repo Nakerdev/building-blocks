@@ -10,13 +10,13 @@ namespace ValueObjects
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
             {
-                return ValidationError.Required;
+                return new ValidationError(nameof(Name), ValidationErrorCode.Required);
             }
 
             const int MAX_ALLOWED_NAME_LENGHT = 255;
             if (value.Length() > MAX_ALLOWED_NAME_LENGHT)
             {
-                return ValidationError.MaximumLengthExceeded;
+                return new ValidationError(nameof(Name), ValidationErrorCode.MaximumLengthExceeded);
             }
 
             return new Name(value);

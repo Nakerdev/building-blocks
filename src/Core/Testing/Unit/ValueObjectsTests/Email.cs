@@ -50,7 +50,11 @@ namespace ValueObjectsTests
             var result = Email.Create(value);
 
             result.IsLeft.Should().BeTrue();
-            result.IfLeft(error => error.Should().Be(ValidationError.Required));
+            result.IfLeft(error => 
+            {
+                error.FieldId.Should().Be(nameof(Email));
+                error.Code.Should().Be(ValidationErrorCode.Required);
+            });
         }
 
         [Test]
@@ -59,7 +63,11 @@ namespace ValueObjectsTests
             var result = Email.Create(new string('a', 256));
 
             result.IsLeft.Should().BeTrue();
-            result.IfLeft(error => error.Should().Be(ValidationError.MaximumLengthExceeded));
+            result.IfLeft(error => 
+            {
+                error.FieldId.Should().Be(nameof(Email));
+                error.Code.Should().Be(ValidationErrorCode.MaximumLengthExceeded);
+            });
         }
 
         [Test]
@@ -68,7 +76,11 @@ namespace ValueObjectsTests
             var result = Email.Create("not-valid#email.com");
 
             result.IsLeft.Should().BeTrue();
-            result.IfLeft(error => error.Should().Be(ValidationError.InvalidFormat));
+            result.IfLeft(error => 
+            {
+                error.FieldId.Should().Be(nameof(Email));
+                error.Code.Should().Be(ValidationErrorCode.InvalidFormat);
+            });
         }
     }
 }

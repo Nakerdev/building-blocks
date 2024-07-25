@@ -1,4 +1,5 @@
 ﻿using LanguageExt;
+using LanguageExt.UnsafeValueAccess;
 using System.Xml;
 using ValueObjects;
 
@@ -17,12 +18,29 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
             string cityId,
             string provinceId)
         {
-            var streetResult = Street.Create(street);
-            var postalCodeResult = PostalCode.Create(postalCode);
-            var cityIdResult = CityId.Create(postalCode);
-            var provinceIdResult = ProvinceId.Create(postalCode);
+            var streetResult = Street.Create(street, "Address.Street");
+            var postalCodeResult = PostalCode.Create(postalCode, "Address.PostalCode");
+            var cityIdResult = CityId.Create(cityId, "Address.CityId");
+            var provinceIdResult = ProvinceId.Create(provinceId, "Address.ProvinceId");
 
-            
+            if(streetResult.IsLeft 
+                || postalCodeResult.IsLeft 
+                || cityIdResult.IsLeft 
+                || provinceIdResult.IsLeft)
+            {
+                var validationErrors = new Seq<ValidationError>();
+                streetResult.IfLeft(error => validationErrors = validationErrors.Add(error));
+                postalCodeResult.IfLeft(error => validationErrors = validationErrors.Add(error));
+                cityIdResult.IfLeft(error => validationErrors = validationErrors.Add(error));
+                provinceIdResult.IfLeft(error => validationErrors = validationErrors.Add(error));
+                return validationErrors;
+            }
+
+            return new Address(
+                street: streetResult.ValueUnsafe(), 
+                postalCode: postalCodeResult.ValueUnsafe(), 
+                cityId: cityIdResult.ValueUnsafe(), 
+                provinceId: provinceIdResult.ValueUnsafe());
         }
 
         public Address(

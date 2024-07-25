@@ -7,20 +7,26 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
     {
         private readonly Guid Value;
 
-        public static Either<ValidationError, ProvinceId> Create(string value)
+        public static Either<ValidationError, ProvinceId> Create(string value, string? customErrorFieldId = null)
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
             {
-                return ValidationError.Required;
+                return BuildValidationError(ValidationErrorCode.Required);
             }
 
             Guid id;
             if (Guid.TryParse(value, out id))
             {
-                return ValidationError.InvalidFormat;
+                return BuildValidationError(ValidationErrorCode.InvalidFormat);
             }
 
             return new ProvinceId(id);
+
+            ValidationError BuildValidationError(ValidationErrorCode errorCode)
+            {
+                var fieldId = customErrorFieldId == null ? nameof(ProvinceId) : customErrorFieldId;
+                return new ValidationError(fieldId, errorCode);
+            }
         }
 
         private ProvinceId(Guid value)

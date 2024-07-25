@@ -11,12 +11,12 @@ namespace ValueObjects
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
             {
-                return ValidationError.Required;
+                return new ValidationError(nameof(PhoneNumber), ValidationErrorCode.Required);
             }
 
             if (!IsValidPhoneNumber(value))
             {
-                return ValidationError.InvalidFormat;
+                return new ValidationError(nameof(PhoneNumber), ValidationErrorCode.InvalidFormat);
             }
 
             return new PhoneNumber(value);

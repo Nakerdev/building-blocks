@@ -7,20 +7,26 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
     {
         private readonly Guid Value;
 
-        public static Either<ValidationError, CityId> Create(string value)
+        public static Either<ValidationError, CityId> Create(string value, string? customErrorFieldId = null)
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
             {
-                return ValidationError.Required;
+                return BuildValidationError(ValidationErrorCode.MaximumLengthExceeded);
             }
 
             Guid id;
             if (Guid.TryParse(value, out id))
             {
-                return ValidationError.InvalidFormat;
+                return BuildValidationError(ValidationErrorCode.InvalidFormat);
             }
 
             return new CityId(id);
+
+            ValidationError BuildValidationError(ValidationErrorCode errorCode)
+            {
+                var fieldId = customErrorFieldId == null ? nameof(CityId) : customErrorFieldId;
+                return new ValidationError(fieldId, errorCode);
+            }
         }
 
         private CityId(Guid value)

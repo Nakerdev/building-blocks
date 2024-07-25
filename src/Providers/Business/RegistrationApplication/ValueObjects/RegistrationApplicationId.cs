@@ -11,13 +11,13 @@ namespace Providers.Business.RegistrationApplication.ValueObjects
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
             {
-                return ValidationError.Required;
+                return new ValidationError(nameof(RegistrationApplicationId), ValidationErrorCode.Required);
             }
 
             Guid id;
             if (Guid.TryParse(value, out id))
             {
-                return ValidationError.InvalidFormat;
+                return new ValidationError(nameof(RegistrationApplicationId), ValidationErrorCode.InvalidFormat);
             }
 
             return new RegistrationApplicationId(id);

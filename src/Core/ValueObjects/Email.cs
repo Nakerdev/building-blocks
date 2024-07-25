@@ -11,18 +11,18 @@ namespace ValueObjects
         {
             if(string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value)) 
             {
-                return ValidationError.Required;
+                return new ValidationError(nameof(Email), ValidationErrorCode.Required);
             }
 
             const int MAX_ALLOWED_EMAIL_LENGHT = 255;
             if(value.Length() > MAX_ALLOWED_EMAIL_LENGHT) 
             {
-                return ValidationError.MaximumLengthExceeded;
+                return new ValidationError(nameof(Email), ValidationErrorCode.MaximumLengthExceeded);
             }
 
             if (!IsValidEmail(value)) 
             { 
-                return ValidationError.InvalidFormat;
+                return new ValidationError(nameof(Email), ValidationErrorCode.InvalidFormat);
             }
 
             return new Email(value);

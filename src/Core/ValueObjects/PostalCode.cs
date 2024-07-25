@@ -6,26 +6,32 @@ namespace ValueObjects
     {
         private readonly int Value;
 
-        public static Either<ValidationError, PostalCode> Create(string value)
+        public static Either<ValidationError, PostalCode> Create(string value, string? customErrorFieldId = null)
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
             {
-                return ValidationError.Required;
+                return BuildValidationError(ValidationErrorCode.Required);
             }
 
             const int MAX_ALLOWED_SPANISH_POSTAL_CODE_LENGTH = 5;
             if (value.Length() > MAX_ALLOWED_SPANISH_POSTAL_CODE_LENGTH)
             {
-                return ValidationError.MaximumLengthExceeded;
+                return BuildValidationError(ValidationErrorCode.MaximumLengthExceeded);
             }
 
             int postalCode;
             if (int.TryParse(value, out postalCode))
             {
-                return ValidationError.InvalidFormat;
+                return BuildValidationError(ValidationErrorCode.InvalidFormat);
             }
 
             return new PostalCode(postalCode);
+
+            ValidationError BuildValidationError(ValidationErrorCode errorCode)
+            {
+                var fieldId = customErrorFieldId == null ? nameof(PostalCode) : customErrorFieldId;
+                return new ValidationError(fieldId, errorCode);
+            }
         }
 
         private PostalCode(int value)
