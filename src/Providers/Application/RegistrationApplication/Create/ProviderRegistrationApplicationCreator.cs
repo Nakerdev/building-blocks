@@ -1,7 +1,6 @@
 ﻿using LanguageExt;
 using Providers.Business.RegistrationApplication;
 using Providers.Business.RegistrationApplication.Contacts;
-using Providers.Infrastructure.RegistrationApplication;
 
 namespace Providers.Application.RegistrationApplication.Create
 {
