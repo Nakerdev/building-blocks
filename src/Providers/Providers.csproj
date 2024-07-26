@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\RegistrationApplication\SignContract\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Core\ValueObjects\ValueObjects.csproj" />
   </ItemGroup>
 
