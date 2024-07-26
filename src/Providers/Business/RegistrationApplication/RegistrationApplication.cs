@@ -25,6 +25,30 @@ namespace Providers.Business.RegistrationApplication
             Contacts = contacts;
             Contract = contract;
         }
+
+        public Either<AddContactError, RegistrationApplication> AddContact(Contact newContact)
+        {
+            if (Contacts.Any(contact => contact.Email == newContact.Email)) 
+            {
+                return AddContactError.DuplicatedContact;
+            }
+
+            var contacts = new List<Contact>();
+            contacts.AddRange(Contacts);
+            contacts.Add(newContact);
+
+            return new RegistrationApplication(
+                id: Id,
+                providerName: Provider.Name,
+                providerAddress: Provider.Address,
+                contacts: contacts,
+                contract: Contract);
+        }
+
+        public enum AddContactError 
+        { 
+            DuplicatedContact
+        }
     }
 
     public sealed class Provider

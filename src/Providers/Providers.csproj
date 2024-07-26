@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\RegistrationApplication\AddContact\TheWrongWay\" />
     <Folder Include="Application\RegistrationApplication\SignContract\" />
   </ItemGroup>
 

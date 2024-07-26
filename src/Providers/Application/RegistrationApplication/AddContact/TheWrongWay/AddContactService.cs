@@ -1,7 +1,7 @@
 ﻿using LanguageExt;
 using Providers.Business.RegistrationApplication;
 
-namespace Providers.Application.RegistrationApplication.AddContact.TheRightWay
+namespace Providers.Application.RegistrationApplication.AddContact.TheWrongWay
 {
     public sealed class AddContactService
     {
@@ -14,13 +14,14 @@ namespace Providers.Application.RegistrationApplication.AddContact.TheRightWay
 
         Either<AddContactError, Business.RegistrationApplication.RegistrationApplication> Add(AddContactRequest request)
         {
-            return 
+            return
                 from application in SearchRegistrationApplication(request.ProviderRegistrationApplicationId)
+                from _1 in CheckIfContactAlreadyExist(request, application)
                 from contact in BuildContact(request)
-                from newApplication in AddContact(application, contact)
-                select newApplication;
-        }
+                from _2 in AddContact(application, contact)
+                select application;
 
+        }
         private Either<AddContactError, Business.RegistrationApplication.RegistrationApplication> SearchRegistrationApplication(
             Business.RegistrationApplication.ValueObjects.RegistrationApplicationId id)
         {
@@ -28,7 +29,18 @@ namespace Providers.Application.RegistrationApplication.AddContact.TheRightWay
                 .SearchById(id)
                 .ToEither(() => AddContactError.ProviderRegistrationApplicationNotFound);
         }
-        
+
+        private Either<AddContactError, Unit> CheckIfContactAlreadyExist(
+            AddContactRequest request,
+            Business.RegistrationApplication.RegistrationApplication application)
+        {
+            if (application.Contacts.Any(contact => contact.Email == request.ContactEmail))
+            {
+                return AddContactError.DuplicatedContact;
+            }
+            return Prelude.unit;
+        }
+
         private Either<AddContactError, Business.RegistrationApplication.Contacts.Contact> BuildContact(AddContactRequest request)
         {
             return new Business.RegistrationApplication.Contacts.Contact(
@@ -38,13 +50,12 @@ namespace Providers.Application.RegistrationApplication.AddContact.TheRightWay
                 address: request.ContactAddress);
         }
 
-        private Either<AddContactError, Business.RegistrationApplication.RegistrationApplication> AddContact(
+        private Either<AddContactError, Unit> AddContact(
             Business.RegistrationApplication.RegistrationApplication application,
             Business.RegistrationApplication.Contacts.Contact contact)
         {
-            return application
-                .AddContact(contact)
-                .MapLeft(_ => AddContactError.DuplicatedContact);
+            application.Contacts.Add(contact);
+            return Prelude.unit;
         }
     }
 }
